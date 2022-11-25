@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Movie catalog</string>
+
+    <string name="common_unknown_error">Unknown error</string>
+
+    <string name="movie_list_title">Trending movies</string>
+</resources>
