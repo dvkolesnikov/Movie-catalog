@@ -1,6 +1,7 @@
 package com.noveogroup.moviecatalog.data.di
 
 import com.noveogroup.moviecatalog.BuildConfig
+import com.noveogroup.moviecatalog.data.network.datasource.ConfigurationDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.GenreDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.MovieDataSource
 import com.noveogroup.moviecatalog.data.network.service.MovieServiceV3
@@ -20,6 +21,8 @@ private val dataSourcesModule = module {
     factory { MovieDataSource(service = get()) }
 
     factory { GenreDataSource(service = get()) }
+
+    factory { ConfigurationDataSource(service = get()) }
 }
 
 private val repositoryModule = module {
@@ -27,7 +30,8 @@ private val repositoryModule = module {
     factory<MoviesRepositoryInterface> {
         MoviesRepository(
             movieDataSource = get(),
-            genreDataSource = get()
+            genreDataSource = get(),
+            configurationDataSource = get()
         )
     }
 }

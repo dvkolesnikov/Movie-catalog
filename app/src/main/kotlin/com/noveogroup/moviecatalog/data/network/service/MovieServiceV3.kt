@@ -1,5 +1,6 @@
 package com.noveogroup.moviecatalog.data.network.service
 
+import com.noveogroup.moviecatalog.data.network.model.ConfigurationResponse
 import com.noveogroup.moviecatalog.data.network.model.GenreListResponse
 import com.noveogroup.moviecatalog.data.network.model.MovieDetailsResponse
 import com.noveogroup.moviecatalog.data.network.model.MovieResponse
@@ -26,4 +27,7 @@ interface MovieServiceV3 {
     suspend fun loadGenres(
         @Query("language") language: String
     ): GenreListResponse
+
+    @GET("/3/configuration")
+    suspend fun loadConfiguration(): ConfigurationResponse
 }

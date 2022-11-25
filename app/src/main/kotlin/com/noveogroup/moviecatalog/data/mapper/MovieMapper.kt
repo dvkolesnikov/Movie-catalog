@@ -5,12 +5,11 @@ import com.noveogroup.moviecatalog.data.network.model.MovieResponse
 import com.noveogroup.moviecatalog.domain.model.Movie
 import com.noveogroup.moviecatalog.domain.model.MovieDetails
 
-fun MovieResponse.convert(genres: List<String>): Movie {
+fun MovieResponse.convert(genres: List<String>, baseImageUrl: String): Movie {
     return Movie(
         id = id,
         rating = voteAverage ?: 0f,
-        //TODO avoid img URL hardcode, load base URL from the server
-        posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
+        posterUrl = "$baseImageUrl$posterPath",
         title = title ?: originalTitle ?: "",
         originalTitle = originalTitle ?: "",
         voteCount = voteCount ?: 0,
@@ -18,11 +17,10 @@ fun MovieResponse.convert(genres: List<String>): Movie {
     )
 }
 
-fun MovieDetailsResponse.convert(): MovieDetails {
+fun MovieDetailsResponse.convert(baseImageUrl: String): MovieDetails {
     return MovieDetails(
         id = id,
-        //TODO avoid img URL hardcode, load base URL from the server
-        posterUrl = "https://image.tmdb.org/t/p/w500$posterPath",
+        posterUrl = "$baseImageUrl$posterPath",
         rating = voteAverage ?: 0f,
         voteCount = voteCount ?: 0,
         title = title ?: originalTitle ?: "",
