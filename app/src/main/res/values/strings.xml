@@ -4,4 +4,7 @@
     <string name="common_unknown_error">Unknown error</string>
 
     <string name="movie_list_title">Trending movies</string>
+
+    <string name="movie_details_title">Details</string>
+    <string name="movie_details_release_date_label">Release date: %1$s</string>
 </resources>

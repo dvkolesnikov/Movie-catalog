@@ -24,12 +24,16 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.noveogroup.moviecatalog.R
 import com.noveogroup.moviecatalog.domain.model.Movie
+import com.noveogroup.moviecatalog.presentation.components.MovieGenres
+import com.noveogroup.moviecatalog.presentation.components.MoviePoster
+import com.noveogroup.moviecatalog.presentation.components.MovieRating
 import com.noveogroup.moviecatalog.presentation.components.TopAppBarTitle
 import com.noveogroup.moviecatalog.presentation.navigation.Screen
 
@@ -58,7 +62,7 @@ fun MovieListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieListView(
+private fun MovieListView(
     state: MovieListScreenState,
     onItemClicked: (MovieListItem.MovieItem) -> Unit,
     onScrolledToBottom: () -> Unit
@@ -75,9 +79,9 @@ fun MovieListView(
             val contentPaddings = remember {
                 PaddingValues(
                     start = 16.dp,
-                    top = paddingValues.calculateTopPadding(),
+                    top = paddingValues.calculateTopPadding() + 8.dp,
                     end = 16.dp,
-                    bottom = paddingValues.calculateBottomPadding()
+                    bottom = paddingValues.calculateBottomPadding() + 8.dp
                 )
             }
 
@@ -92,7 +96,7 @@ fun MovieListView(
 }
 
 @Composable
-fun MovieListContent(
+private fun MovieListContent(
     paddingValues: PaddingValues,
     items: List<MovieListItem>,
     onItemClicked: (MovieListItem.MovieItem) -> Unit,
@@ -151,7 +155,7 @@ fun LoadingListItemView() {
 }
 
 @Composable
-fun MovieListItemView(
+private fun MovieListItemView(
     movie: MovieListItem.MovieItem,
     onClicked: (MovieListItem.MovieItem) -> Unit
 ) {
@@ -165,14 +169,11 @@ fun MovieListItemView(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        AsyncImage(
+        MoviePoster(
             modifier = Modifier
                 .weight(1f)
                 .height(100.dp),
-            model = movie.movie.posterUrl,
-            contentDescription = "Movie poster"
-/*            placeholder = rememberVectorPainter(image = Icons.Default),
-            error = rememberVectorPainter(image = Icons.Default.AccountCircle)*/
+            posterUrl = movie.movie.posterUrl
         )
 
         Column(
@@ -182,26 +183,55 @@ fun MovieListItemView(
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text(text = movie.movie.title)
+            movie.movie.let {
+                MovieTitle(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    title = it.title,
+                    originalTitle = it.originalTitle
+                )
 
-            Text(text = movie.movie.originalTitle)
+                MovieGenres(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    genres = it.genres
+                )
 
-            Text(text = movie.movie.genres.joinToString())
-
-            Row {
-
-                Text(text = "${movie.movie.rating}")
-
-                Text(text = "(${movie.movie.voteCount})")
+                MovieRating(basicFontSize = 14.sp, rating = it.rating, voteCount = it.voteCount)
             }
-
         }
+    }
+}
+
+@Composable
+private fun MovieTitle(
+    modifier: Modifier,
+    title: String,
+    originalTitle: String
+) {
+
+    Column(modifier = modifier) {
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = title,
+            fontSize = 16.sp,
+            color = Color.Black
+        )
+
+        if (title != originalTitle && originalTitle.isNotEmpty()) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = originalTitle,
+                fontSize = 12.sp,
+                color = Color.LightGray
+            )
+        }
+
     }
 }
 
 @Preview
 @Composable
-fun MovieListPreview() {
+private fun MovieListPreview() {
 
     MovieListView(
         state = MovieListScreenState(
@@ -224,6 +254,6 @@ fun MovieListPreview() {
         onScrolledToBottom = {})
 }
 
-fun LazyListState.isScrolledNearBottom(): Boolean {
+private fun LazyListState.isScrolledNearBottom(): Boolean {
     return (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) >= layoutInfo.totalItemsCount - 5
 }

@@ -3,6 +3,7 @@ package com.noveogroup.moviecatalog
 import com.noveogroup.moviecatalog.data.di.dataModule
 import com.noveogroup.moviecatalog.domain.di.domainModule
 import com.noveogroup.moviecatalog.presentation.App
+import com.noveogroup.moviecatalog.presentation.di.movieDetailsModule
 import com.noveogroup.moviecatalog.presentation.di.movieListModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +19,8 @@ object KoinInjector {
             modules(
                 dataModule,
                 domainModule,
-                movieListModule
+                movieListModule,
+                movieDetailsModule
             )
         }
     }

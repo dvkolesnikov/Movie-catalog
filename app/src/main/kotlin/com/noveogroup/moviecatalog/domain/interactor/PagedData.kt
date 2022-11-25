@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class DataPump<T>(
-    private val onLoadAction: suspend (Int) -> T
+class PagedData<T>(
+    private val onLoadAction: suspend (Int) -> Result<T>
 ) {
 
     private var currentPage = 1
@@ -20,8 +20,11 @@ class DataPump<T>(
             delay(100)
         }
         isLoading = true
-        onLoadAction(currentPage++).let {
-            _dataFlow.emit(it)
+        onLoadAction(currentPage).let {
+            if (it.isSuccess) {
+                currentPage++
+                _dataFlow.emit(it.getOrThrow())
+            }
         }
         isLoading = false
     }

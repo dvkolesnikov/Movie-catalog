@@ -4,7 +4,7 @@ import com.noveogroup.moviecatalog.data.mapper.convert
 import com.noveogroup.moviecatalog.data.network.datasource.GenreDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.MovieDataSource
 import com.noveogroup.moviecatalog.domain.api.MoviesRepositoryInterface
-import com.noveogroup.moviecatalog.domain.interactor.DataPump
+import com.noveogroup.moviecatalog.domain.interactor.PagedData
 import com.noveogroup.moviecatalog.domain.model.Movie
 import com.noveogroup.moviecatalog.domain.model.MovieDetails
 
@@ -13,8 +13,8 @@ class MoviesRepository(
     private val genreDataSource: GenreDataSource
 ) : MoviesRepositoryInterface {
 
-    override suspend fun loadTrendingMovies(): DataPump<Result<List<Movie>>> {
-        return DataPump { page ->
+    override suspend fun loadTrendingMovies(): PagedData<List<Movie>> {
+        return PagedData { page ->
             movieDataSource.loadTrendingMovies(page).map {
                 it.results?.map { movieResponse ->
                     val genres = genreDataSource.getGenresByIds(
@@ -26,8 +26,10 @@ class MoviesRepository(
         }
     }
 
-    override suspend fun loadMovieDetails(id: Long): MovieDetails {
-        TODO("Not yet implemented")
+    override suspend fun loadMovieDetails(id: Long): Result<MovieDetails> {
+        return movieDataSource.loadMovieDetails(id).map {
+            it.convert()
+        }
     }
 
 }

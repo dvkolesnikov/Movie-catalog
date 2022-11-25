@@ -7,7 +7,7 @@ sealed class Screen(val route: String) {
 
     companion object {
         const val NAV_ROUTE_MOVIE_LIST = "movie_list"
-        const val NAV_ROUTE_MOVIE_DETAILS = "movie_details/{id}"
+        const val NAV_ROUTE_MOVIE_DETAILS = "movie_details/{movieId}"
     }
 
 }

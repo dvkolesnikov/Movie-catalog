@@ -8,11 +8,11 @@ class MovieInteractor(
     private val repository: MoviesRepositoryInterface
 ) {
 
-    suspend fun loadTrendingMovies(): DataPump<Result<List<Movie>>> {
+    suspend fun loadTrendingMovies(): PagedData<List<Movie>> {
         return repository.loadTrendingMovies()
     }
 
-    suspend fun loadMovieDetails(id: Long): MovieDetails {
+    suspend fun loadMovieDetails(id: Long): Result<MovieDetails> {
         return repository.loadMovieDetails(id)
     }
 }

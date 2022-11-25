@@ -2,11 +2,10 @@ package com.noveogroup.moviecatalog.presentation.screen.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.noveogroup.moviecatalog.domain.interactor.DataPump
 import com.noveogroup.moviecatalog.domain.interactor.MovieInteractor
+import com.noveogroup.moviecatalog.domain.interactor.PagedData
 import com.noveogroup.moviecatalog.domain.model.Movie
 import com.noveogroup.moviecatalog.ext.debug
-import com.noveogroup.moviecatalog.ext.warn
 import com.noveogroup.moviecatalog.presentation.navigation.Screen
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,7 @@ class MovieListViewModel(
     private val movieInteractor: MovieInteractor
 ) : ViewModel() {
 
-    private var dataPump: DataPump<Result<List<Movie>>>? = null
+    private var dataPump: PagedData<List<Movie>>? = null
 
     private val _state = MutableStateFlow(MovieListScreenState(emptyList()))
     val state = _state.asStateFlow()
@@ -32,17 +31,11 @@ class MovieListViewModel(
             movieInteractor.loadTrendingMovies().also { pump ->
                 dataPump = pump
                 pump.loadNextChunk()
-                pump.dataFlow.collect { result ->
-                    val newMovieItems = result.getOrElse { error ->
-                        warn("Failed to load movie list", error)
-                        emptyList()
-                    }.let { newMovies ->
-                        newMovies.map { MovieListItem.MovieItem(it) }
-                    }
+                pump.dataFlow.collect { newMovies ->
                     _state.update { screenState ->
                         screenState.copy(
                             items = screenState.items.filter { it !is MovieListItem.Loading } +
-                                    newMovieItems
+                                    newMovies.map { MovieListItem.MovieItem(it) }
 
                         )
                     }
@@ -54,7 +47,12 @@ class MovieListViewModel(
     fun handleListScrolledToEnd() {
         debug("Scrolled to bottom")
         viewModelScope.launch {
-            _state.update { it.copy(items = it.items + listOf(MovieListItem.Loading)) }
+            _state.update { previousState ->
+                previousState.copy(
+                    items = previousState.items.filter { it !is MovieListItem.Loading } +
+                            listOf(MovieListItem.Loading)
+                )
+            }
             dataPump?.loadNextChunk()
         }
     }

@@ -1,5 +1,6 @@
 package com.noveogroup.moviecatalog.data.network.datasource
 
+import com.noveogroup.moviecatalog.data.network.model.MovieDetailsResponse
 import com.noveogroup.moviecatalog.data.network.model.MovieResponse
 import com.noveogroup.moviecatalog.data.network.model.PagedResponse
 import com.noveogroup.moviecatalog.data.network.service.MovieServiceV3
@@ -14,6 +15,15 @@ class MovieDataSource(private val service: MovieServiceV3) {
             runCatching {
                 val lang = Locale.getDefault().toLanguageTag()
                 service.loadTrendingMovies(page, lang)
+            }
+        }
+    }
+
+    suspend fun loadMovieDetails(movieId: Long): Result<MovieDetailsResponse> {
+        return withContext(Dispatchers.IO) {
+            runCatching {
+                val lang = Locale.getDefault().toLanguageTag()
+                service.loadMovieDetails(movieId, lang)
             }
         }
     }
