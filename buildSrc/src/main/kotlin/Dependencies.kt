@@ -18,11 +18,6 @@ object Versions {
     const val moshi = "1.14.0"
     const val okhttp = "4.10.0"
     const val retrofit = "2.9.0"
-
-    //test
-    const val junit = "4.13.2"
-    const val extJunit = "1.1.4"
-    const val espresso = "3.4.0"
 }
 
 object AppDependencies {
@@ -59,11 +54,6 @@ object AppDependencies {
         "com.squareup.moshi:moshi-kotlin:${Versions.moshi}"
     )
 
-    //test libs
-    private const val junit = "junit:junit:${Versions.junit}"
-    private const val extJUnit = "androidx.test.ext:junit:${Versions.extJunit}"
-    private const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.espresso}"
-
     val appLibraries = arrayListOf<String>().apply {
         add(kotlinStdLib)
         add(coreKtx)
@@ -71,15 +61,6 @@ object AppDependencies {
         addAll(koinAndroid)
         addAll(network)
         add(coil)
-    }
-
-    val androidTestLibraries = arrayListOf<String>().apply {
-        add(extJUnit)
-        add(espressoCore)
-    }
-
-    val testLibraries = arrayListOf<String>().apply {
-        add(junit)
     }
 }
 
