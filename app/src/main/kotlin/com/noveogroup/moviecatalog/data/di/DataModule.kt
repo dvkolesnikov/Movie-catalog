@@ -20,9 +20,9 @@ private val dataSourcesModule = module {
 
     factory { MovieDataSource(service = get()) }
 
-    factory { GenreDataSource(service = get()) }
+    single { GenreDataSource(service = get()) }
 
-    factory { ConfigurationDataSource(service = get()) }
+    single { ConfigurationDataSource(service = get()) }
 }
 
 private val repositoryModule = module {

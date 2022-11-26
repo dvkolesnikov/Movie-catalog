@@ -6,16 +6,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,8 +58,10 @@ fun MovieListScreen(
 
     MovieListView(
         state = viewModel.state.collectAsState().value,
+        error = viewModel.errorEvents.collectAsState(initial = null).value,
         onItemClicked = viewModel::handleMovieClicked,
-        onScrolledToBottom = viewModel::handleListScrolledToEnd
+        onScrolledToBottom = viewModel::handleListScrolledToEnd,
+        onRefreshClicked = viewModel::handleRefreshClicked
     )
 
 }
@@ -64,8 +70,10 @@ fun MovieListScreen(
 @Composable
 private fun MovieListView(
     state: MovieListScreenState,
+    error: String?,
     onItemClicked: (MovieListItem.MovieItem) -> Unit,
-    onScrolledToBottom: () -> Unit
+    onScrolledToBottom: () -> Unit,
+    onRefreshClicked: () -> Unit
 ) {
 
     Scaffold(
@@ -85,14 +93,44 @@ private fun MovieListView(
                 )
             }
 
-            MovieListContent(
-                paddingValues = contentPaddings,
-                items = state.items,
-                onItemClicked = onItemClicked,
-                onScrolledToBottom = onScrolledToBottom
-            )
+            if (!error.isNullOrEmpty() && state.items.none { it !is MovieListItem.Loading }) {
+
+                MovieListError(error = error, onRefreshClicked = onRefreshClicked)
+
+            } else {
+
+                MovieListContent(
+                    paddingValues = contentPaddings,
+                    items = state.items,
+                    onItemClicked = onItemClicked,
+                    onScrolledToBottom = onScrolledToBottom
+                )
+            }
         }
     )
+}
+
+@Composable
+private fun MovieListError(
+    error: String,
+    onRefreshClicked: () -> Unit
+) {
+
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(text = error)
+
+        Button(onClick = onRefreshClicked) {
+
+            Text(text = stringResource(id = R.string.movie_list_refresh_button))
+        }
+    }
 }
 
 @Composable
@@ -111,9 +149,16 @@ private fun MovieListContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = paddingValues
         ) {
-            items(items.size) { index ->
-
-                when (val item = items.toList()[index]) {
+            items(
+                count = items.size,
+                key = {
+                    when (val item = items[it]) {
+                        MovieListItem.Loading -> -1
+                        is MovieListItem.MovieItem -> item.movie.id
+                    }
+                }
+            ) { index ->
+                when (val item = items[index]) {
                     MovieListItem.Loading -> {
                         LoadingListItemView()
                     }
@@ -124,8 +169,6 @@ private fun MovieListContent(
                         )
                     }
                 }
-
-
             }
         }
     }
@@ -214,7 +257,7 @@ private fun MovieTitle(
             modifier = Modifier.fillMaxWidth(),
             text = title,
             fontSize = 16.sp,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         if (title != originalTitle && originalTitle.isNotEmpty()) {
@@ -250,10 +293,12 @@ private fun MovieListPreview() {
                 MovieListItem.Loading
             )
         ),
+        error = null,
         onItemClicked = {},
-        onScrolledToBottom = {})
+        onScrolledToBottom = {},
+        onRefreshClicked = {})
 }
 
 private fun LazyListState.isScrolledNearBottom(): Boolean {
-    return (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) >= layoutInfo.totalItemsCount - 5
+    return (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) >= layoutInfo.totalItemsCount - 2
 }

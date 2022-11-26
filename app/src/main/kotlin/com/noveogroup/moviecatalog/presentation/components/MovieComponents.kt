@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.noveogroup.moviecatalog.R
+import com.noveogroup.moviecatalog.presentation.theme.HighMarkColor
+import com.noveogroup.moviecatalog.presentation.theme.LowMarkColor
 
 @Composable
 fun MoviePoster(modifier: Modifier, posterUrl: String) {
@@ -63,8 +65,8 @@ fun MovieRating(basicFontSize: TextUnit, rating: Float, voteCount: Int) {
             Text(
                 text = "$rating",
                 color = when {
-                    rating < 6f -> Color.Red
-                    rating > 8 -> Color.Green
+                    rating < 6f -> LowMarkColor
+                    rating > 8 -> HighMarkColor
                     else -> Color.Black
                 },
                 fontSize = if (rating < 8f) {

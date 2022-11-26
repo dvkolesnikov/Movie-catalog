@@ -23,6 +23,9 @@ class MovieListViewModel(
     private val _state = MutableStateFlow(MovieListScreenState(emptyList()))
     val state = _state.asStateFlow()
 
+    private val _errorEvents = MutableSharedFlow<String?>()
+    val errorEvents = _errorEvents.asSharedFlow()
+
     private val _navigationEvents = MutableSharedFlow<Screen>()
     val navigationEvents = _navigationEvents.asSharedFlow()
 
@@ -31,21 +34,35 @@ class MovieListViewModel(
             movieInteractor.loadTrendingMovies().also { pump ->
                 dataPump = pump
                 pump.loadNextChunk()
-                pump.dataFlow.collect { newMovies ->
+                pump.dataFlow.collect { newMoviesResult ->
+                    val newMovies = newMoviesResult.getOrNull() ?: emptyList()
                     _state.update { screenState ->
                         screenState.copy(
                             items = screenState.items.filter { it !is MovieListItem.Loading } +
                                     newMovies.map { MovieListItem.MovieItem(it) }
-
                         )
+                    }
+                    newMoviesResult.exceptionOrNull()?.localizedMessage?.let { error ->
+                        _errorEvents.emit(error)
                     }
                 }
             }
         }
     }
 
+    fun handleRefreshClicked() {
+        viewModelScope.launch {
+            _errorEvents.emit(null)
+        }
+        loadNextChunkOfData()
+    }
+
     fun handleListScrolledToEnd() {
         debug("Scrolled to bottom")
+        loadNextChunkOfData()
+    }
+
+    private fun loadNextChunkOfData() {
         viewModelScope.launch {
             _state.update { previousState ->
                 previousState.copy(

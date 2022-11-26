@@ -31,7 +31,8 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -68,6 +69,26 @@ android {
     buildFeatures {
         compose = true
     }
+    lint {
+        abortOnError = true
+        checkAllWarnings = true
+        disable += setOf(
+            "AllowBackup",
+            "ContentDescription",
+            "InvalidPackage",
+            "SpUsage",
+            "IconMissingDensityFolder",
+            "SelectableText",
+            "RtlCompat",
+            "RtlEnabled",
+            "RtlHardcoded",
+            "RtlSymmetry",
+            "MissingPrefix",
+            "MissingRegistered",
+            "LockedOrientationActivity",
+        )
+    }
+
     namespace = "com.noveogroup.moviecatalog"
 }
 
