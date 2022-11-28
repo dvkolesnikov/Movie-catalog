@@ -145,7 +145,9 @@ fun MovieDetailsContent(
 
         MovieGenres(modifier = Modifier.fillMaxWidth(), genres = movieDetails.genres)
 
-        MovieReleaseDate(modifier = Modifier.fillMaxWidth(), releaseDate = movieDetails.releaseDate)
+        movieDetails.releaseDate?.let {
+            MovieReleaseDate(modifier = Modifier.fillMaxWidth(), releaseDate = it)
+        }
     }
 }
 
@@ -224,12 +226,15 @@ private fun MovieTitle(
 }
 
 @Composable
-private fun MovieReleaseDate(modifier: Modifier, releaseDate: String) {
-
+private fun MovieReleaseDate(modifier: Modifier, releaseDate: LocalDate) {
     Text(
         modifier = modifier,
-        text = stringResource(id = R.string.movie_details_release_date_label, releaseDate),
-        color = Color.LightGray,
+        text = stringResource(
+            id = R.string.movie_details_release_date_label,
+            releaseDate.format(
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+            )
+        ),
         fontSize = 14.sp
     )
 }
@@ -254,7 +259,7 @@ fun MovieDetailsPreview() {
                         "officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum " +
                         "quidem rerum facilis est et expedita distinctio. ",
                 tagLine = "Tagline",
-                releaseDate = "01-01-2000"
+                releaseDate = LocalDate.parse("2000-01-01")
             )
         ),
         onBackClick = {}

@@ -28,6 +28,6 @@ fun MovieDetailsResponse.convert(baseImageUrl: String): MovieDetails {
         genres = genres.map { it.name },
         overview = overview ?: "",
         tagLine = tagline ?: "",
-        releaseDate = releaseDate ?: ""
+        releaseDate = releaseDate
     )
 }

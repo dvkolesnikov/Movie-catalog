@@ -1,6 +1,7 @@
 package com.noveogroup.moviecatalog.data.di
 
 import com.noveogroup.moviecatalog.BuildConfig
+import com.noveogroup.moviecatalog.data.network.adapter.LocalDateJsonAdapter
 import com.noveogroup.moviecatalog.data.network.datasource.ConfigurationDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.GenreDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.MovieDataSource
@@ -66,6 +67,7 @@ private val restModule = module {
     factory {
         MoshiConverterFactory.create(
             Moshi.Builder()
+                .add(LocalDateJsonAdapter())
                 .addLast(KotlinJsonAdapterFactory())
                 .build()
         )

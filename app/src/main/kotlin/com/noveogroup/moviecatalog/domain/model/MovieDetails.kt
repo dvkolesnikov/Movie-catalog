@@ -1,5 +1,7 @@
 package com.noveogroup.moviecatalog.domain.model
 
+import java.time.LocalDate
+
 data class MovieDetails(
     val id: Long,
     val posterUrl: String,
@@ -10,6 +12,6 @@ data class MovieDetails(
     val genres: List<String>,
     val overview: String,
     val tagLine: String,
-    val releaseDate: String
+    val releaseDate: LocalDate?
 
 )

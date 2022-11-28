@@ -1,6 +1,7 @@
 package com.noveogroup.moviecatalog.data.network.model
 
 import com.squareup.moshi.Json
+import java.time.LocalDate
 
 data class MovieDetailsResponse(
     @Json(name = "poster_path")
@@ -8,7 +9,7 @@ data class MovieDetailsResponse(
     @Json(name = "overview")
     val overview: String?,
     @Json(name = "release_date")
-    val releaseDate: String?,
+    val releaseDate: LocalDate?,
     @Json(name = "id")
     val id: Long,
     @Json(name = "original_title")
