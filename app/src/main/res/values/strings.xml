@@ -2,10 +2,15 @@
     <string name="app_name">Movie catalog</string>
 
     <string name="common_unknown_error">Unknown error</string>
+    <string name="common_content_description_back">"Back"</string>
+    <string name="common_content_description_poster_placeholder">Movie poster placeholder</string>
+    <string name="common_content_description_poster">Movie poster</string>
 
     <string name="movie_list_title">Trending movies</string>
     <string name="movie_list_refresh_button">Refresh</string>
 
+
     <string name="movie_details_title">Details</string>
     <string name="movie_details_release_date_label">Release date: %1$s</string>
+
 </resources>

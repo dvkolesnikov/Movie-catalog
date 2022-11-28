@@ -19,7 +19,6 @@ fun MainNavigationHolder() {
         navController = navController,
         startDestination = Screen.NAV_ROUTE_MOVIE_LIST
     ) {
-
         composable(route = Screen.NAV_ROUTE_MOVIE_LIST) {
             MovieListScreen(
                 navController = navController,
@@ -38,5 +37,4 @@ fun MainNavigationHolder() {
             )
         }
     }
-
 }

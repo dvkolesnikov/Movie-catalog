@@ -9,5 +9,4 @@ sealed class Screen(val route: String) {
         const val NAV_ROUTE_MOVIE_LIST = "movie_list"
         const val NAV_ROUTE_MOVIE_DETAILS = "movie_details/{movieId}"
     }
-
 }

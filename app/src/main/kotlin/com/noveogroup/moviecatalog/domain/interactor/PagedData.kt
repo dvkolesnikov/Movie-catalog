@@ -1,6 +1,5 @@
 package com.noveogroup.moviecatalog.domain.interactor
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,8 +16,8 @@ class PagedData<T>(
     val dataFlow: SharedFlow<Result<T>> = _dataFlow.asSharedFlow()
 
     suspend fun loadNextChunk() {
-        while (!isLoading.compareAndSet(/* expectedValue = */ false, /* newValue = */ true)) {
-            delay(100)
+        if (!isLoading.compareAndSet(/* expectedValue = */ false, /* newValue = */ true)) {
+            return
         }
         onLoadAction(currentPage).let {
             if (it.isSuccess) {
@@ -28,5 +27,4 @@ class PagedData<T>(
         }
         isLoading.set(false)
     }
-
 }

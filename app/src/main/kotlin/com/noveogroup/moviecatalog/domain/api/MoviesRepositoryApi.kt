@@ -4,8 +4,7 @@ import com.noveogroup.moviecatalog.domain.interactor.PagedData
 import com.noveogroup.moviecatalog.domain.model.Movie
 import com.noveogroup.moviecatalog.domain.model.MovieDetails
 
-
-interface MoviesRepositoryInterface {
+interface MoviesRepositoryApi {
 
     suspend fun loadTrendingMovies(): PagedData<List<Movie>>
 

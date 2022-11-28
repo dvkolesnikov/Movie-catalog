@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("org.jmailen.kotlinter") version Versions.kotlinterPLugin
 }
 
 android {
@@ -41,6 +42,8 @@ android {
         }
     }
     flavorDimensions.add(AppConfig.envDimension)
+    // Even though flavors are actually the same for now they can be used to organise work in more
+    // safe and effective way if there are more than one backend instance.
     productFlavors {
         create("dev") {
             applicationIdSuffix = ".$name"
@@ -93,11 +96,6 @@ android {
 }
 
 dependencies {
-    //std lib
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     //app libs
     implementation(AppDependencies.appLibraries)
-    //test libs
-    //testImplementation(AppDependencies.testLibraries)
-    //androidTestImplementation(AppDependencies.androidTestLibraries)
 }

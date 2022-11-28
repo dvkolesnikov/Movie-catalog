@@ -4,7 +4,7 @@ import com.noveogroup.moviecatalog.data.mapper.convert
 import com.noveogroup.moviecatalog.data.network.datasource.ConfigurationDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.GenreDataSource
 import com.noveogroup.moviecatalog.data.network.datasource.MovieDataSource
-import com.noveogroup.moviecatalog.domain.api.MoviesRepositoryInterface
+import com.noveogroup.moviecatalog.domain.api.MoviesRepositoryApi
 import com.noveogroup.moviecatalog.domain.interactor.PagedData
 import com.noveogroup.moviecatalog.domain.model.Movie
 import com.noveogroup.moviecatalog.domain.model.MovieDetails
@@ -13,7 +13,7 @@ class MoviesRepository(
     private val movieDataSource: MovieDataSource,
     private val genreDataSource: GenreDataSource,
     private val configurationDataSource: ConfigurationDataSource
-) : MoviesRepositoryInterface {
+) : MoviesRepositoryApi {
 
     override suspend fun loadTrendingMovies(): PagedData<List<Movie>> {
         return PagedData { page ->
@@ -34,5 +34,4 @@ class MoviesRepository(
             it.convert(configurationDataSource.loadOriginalImageBaseUrl())
         }
     }
-
 }

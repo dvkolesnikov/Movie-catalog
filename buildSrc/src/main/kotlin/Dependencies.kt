@@ -6,6 +6,7 @@ object Versions {
     const val gradle = "7.3.1"
     const val kotlin = "1.7.20"
     const val kotlinComposeCompiler = "1.3.2"
+    const val kotlinterPLugin = "3.12.0"
 
     //libs
     const val coil = "2.2.2"
@@ -25,12 +26,11 @@ object AppDependencies {
     private const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
 
     //android ui
-    private val coil = "io.coil-kt:coil-compose:${Versions.coil}"
+    private const val coil = "io.coil-kt:coil-compose:${Versions.coil}"
     private val compose = listOf(
-        "androidx.compose.ui:ui:1.3.0",
+        "androidx.compose.ui:ui:${Versions.compose}",
         "androidx.compose.ui:ui-tooling:${Versions.compose}",
         "androidx.compose.foundation:foundation:${Versions.compose}",
-        "androidx.compose.material:material:${Versions.compose}",
         "androidx.compose.material:material-icons-core:${Versions.compose}",
         "androidx.compose.material:material-icons-extended:${Versions.compose}",
         "androidx.compose.material3:material3:${Versions.composeMaterial3}",

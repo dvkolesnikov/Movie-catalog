@@ -1,7 +1,6 @@
-package com.noveogroup.moviecatalog.presentation
+package com.noveogroup.moviecatalog
 
 import android.app.Application
-import com.noveogroup.moviecatalog.KoinInjector
 
 class App : Application() {
 

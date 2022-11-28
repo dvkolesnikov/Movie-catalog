@@ -1,4 +1,4 @@
-package com.noveogroup.moviecatalog
+package com.noveogroup.moviecatalog.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,7 +16,5 @@ class MainActivity : ComponentActivity() {
                 MainNavigationHolder()
             }
         }
-
     }
-
 }

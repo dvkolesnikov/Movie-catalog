@@ -2,27 +2,21 @@ package com.noveogroup.moviecatalog.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
-private val DarkColorScheme = darkColors(
+private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColor,
-    onPrimary = OnPrimaryColor,
-    secondary = SecondaryColor,
-    onSecondary = OnSecondaryColor,
-    onBackground = OnBackgroundColor,
+    secondary = SecondaryColor
 )
 
-private val LightColorScheme = lightColors(
+private val LightColorScheme = lightColorScheme(
     primary = PrimaryColor,
-    onPrimary = OnPrimaryColor,
-    secondary = SecondaryColor,
-    onSecondary = OnSecondaryColor,
-    onBackground = OnBackgroundColor,
+    secondary = SecondaryColor
 )
 
 private val ThemeShapes = Shapes(
@@ -39,7 +33,7 @@ fun AppTheme(
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
-        colors = colorScheme,
+        colorScheme = colorScheme,
         shapes = ThemeShapes,
         content = content
     )

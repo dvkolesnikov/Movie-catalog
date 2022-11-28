@@ -13,12 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +26,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,12 +44,11 @@ fun MovieListScreen(
     navController: NavController,
     viewModel: MovieListViewModel
 ) {
-
     LaunchedEffect(Unit) {
         viewModel.navigationEvents.collect {
             when (it) {
                 is Screen.MovieDetails -> navController.navigate(it.route)
-                else -> {} //do nothing
+                else -> {} // do nothing
             }
         }
     }
@@ -63,7 +60,6 @@ fun MovieListScreen(
         onScrolledToBottom = viewModel::handleListScrolledToEnd,
         onRefreshClicked = viewModel::handleRefreshClicked
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +71,6 @@ private fun MovieListView(
     onScrolledToBottom: () -> Unit,
     onRefreshClicked: () -> Unit
 ) {
-
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -94,11 +89,8 @@ private fun MovieListView(
             }
 
             if (!error.isNullOrEmpty() && state.items.none { it !is MovieListItem.Loading }) {
-
                 MovieListError(error = error, onRefreshClicked = onRefreshClicked)
-
             } else {
-
                 MovieListContent(
                     paddingValues = contentPaddings,
                     items = state.items,
@@ -115,7 +107,6 @@ private fun MovieListError(
     error: String,
     onRefreshClicked: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -123,11 +114,9 @@ private fun MovieListError(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text(text = error)
 
         Button(onClick = onRefreshClicked) {
-
             Text(text = stringResource(id = R.string.movie_list_refresh_button))
         }
     }
@@ -140,7 +129,6 @@ private fun MovieListContent(
     onItemClicked: (MovieListItem.MovieItem) -> Unit,
     onScrolledToBottom: () -> Unit
 ) {
-
     val lazyListState = rememberLazyListState()
 
     Box {
@@ -182,17 +170,14 @@ private fun MovieListContent(
     }
 }
 
-
 @Composable
 fun LoadingListItemView() {
-
     Box(
         modifier = Modifier
             .height(48.dp)
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-
         CircularProgressIndicator()
     }
 }
@@ -202,7 +187,6 @@ private fun MovieListItemView(
     movie: MovieListItem.MovieItem,
     onClicked: (MovieListItem.MovieItem) -> Unit
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -211,7 +195,6 @@ private fun MovieListItemView(
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         MoviePoster(
             modifier = Modifier
                 .weight(1f)
@@ -225,7 +208,6 @@ private fun MovieListItemView(
                 .padding(start = 8.dp),
             verticalArrangement = Arrangement.Center
         ) {
-
             movie.movie.let {
                 MovieTitle(
                     modifier = Modifier.padding(bottom = 8.dp),
@@ -250,32 +232,26 @@ private fun MovieTitle(
     title: String,
     originalTitle: String
 ) {
-
     Column(modifier = modifier) {
-
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = title,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onBackground
+            fontSize = 16.sp
         )
 
         if (title != originalTitle && originalTitle.isNotEmpty()) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = originalTitle,
-                fontSize = 12.sp,
-                color = Color.LightGray
+                fontSize = 12.sp
             )
         }
-
     }
 }
 
 @Preview
 @Composable
 private fun MovieListPreview() {
-
     MovieListView(
         state = MovieListScreenState(
             items = listOf(
@@ -296,7 +272,8 @@ private fun MovieListPreview() {
         error = null,
         onItemClicked = {},
         onScrolledToBottom = {},
-        onRefreshClicked = {})
+        onRefreshClicked = {}
+    )
 }
 
 private fun LazyListState.isScrolledNearBottom(): Boolean {

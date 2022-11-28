@@ -33,7 +33,6 @@ class ConfigurationDataSource(
                         cachedConfiguration = it.getOrNull()
                     }
                 }
-
             }
         }
         return cachedConfiguration

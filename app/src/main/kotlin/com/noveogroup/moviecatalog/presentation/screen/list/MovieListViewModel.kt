@@ -39,7 +39,7 @@ class MovieListViewModel(
                     _state.update { screenState ->
                         screenState.copy(
                             items = screenState.items.filter { it !is MovieListItem.Loading } +
-                                    newMovies.map { MovieListItem.MovieItem(it) }
+                                newMovies.map { MovieListItem.MovieItem(it) }
                         )
                     }
                     newMoviesResult.exceptionOrNull()?.localizedMessage?.let { error ->
@@ -67,7 +67,7 @@ class MovieListViewModel(
             _state.update { previousState ->
                 previousState.copy(
                     items = previousState.items.filter { it !is MovieListItem.Loading } +
-                            listOf(MovieListItem.Loading)
+                        listOf(MovieListItem.Loading)
                 )
             }
             dataPump?.loadNextChunk()
@@ -79,5 +79,4 @@ class MovieListViewModel(
             _navigationEvents.emit(Screen.MovieDetails(movie.movie.id))
         }
     }
-
 }
